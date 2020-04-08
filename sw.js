@@ -40,15 +40,15 @@ addEventListener('install', function(e) {
   self.skipWaiting();
   e.waitUntil(
     caches.open(site_cache_of.assets)
-      .then(function(c) {
-        // non-essential/nice-to-have assets are added asynchronously
-        c.addAll(site_preloaded_assets.supporting);
-        // *synchronously* add only for essential assets and fallbacks
-        return c.addAll(site_preloaded_assets.essential);
-      })
-      .catch(e) {
-        console.error('Caches error:', e);
-      }
+    .then(function(c) {
+      // non-essential/nice-to-have assets are added asynchronously
+      c.addAll(site_preloaded_assets.supporting);
+      // *synchronously* add only for essential assets and fallbacks
+      return c.addAll(site_preloaded_assets.essential);
+    })
+    .catch(function(e) {
+      console.error('Caches error:', e);
+    })
   );
 // end install event listener
 });
@@ -97,7 +97,7 @@ addEventListener('fetch', function(fe) {
           caches.open(site_cache_of.pages)
           .then(function(this_cache) {
             this_cache.put(request,copy);
-          });
+          })
         );
         return fetch_response;
       })
@@ -110,7 +110,7 @@ addEventListener('fetch', function(fe) {
           return caches.match(site_offline_path);
         });
 
-      });
+      })
     // end respondWith
     );
     return;
@@ -129,22 +129,22 @@ addEventListener('fetch', function(fe) {
               .then(function(this_cache){
                 return this_cache.put(request, fetch_response);
               });
-            });
+            })
           );
           return cached_response;
         }
         return fetch(request)
         .then(function(fetch_response) {
-          const.copy = fetch_response.clone();
+          const copy = fetch_response.clone();
           fe.waitUntil(
             caches.open(site_cache_of.requests)
             .then(function(this_cache) {
               this_cache.put(request, copy);
-            });
+            })
           );
           return fetch_response;
         });
-      });
+      })
     // end respondWith
     );
     return;

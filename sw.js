@@ -16,7 +16,7 @@ const site_preloaded_assets = {
 };
 
 const site_cache_of = {
-  assets: `assets.${VERSION}`,
+  assets: `assets.${version}`,
   pages: `pages`,
   requests: `requests`
 };
